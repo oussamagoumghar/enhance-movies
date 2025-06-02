@@ -173,34 +173,34 @@ class MovieSearch extends HTMLElement {
     this.searchDialogInput.removeEventListener('input', e => this.onInput(e.target.value))
   }
 
-  // Fires every time a user modifies or clears the search input
+  // Split out handling resetting the input, debouncing, and updating the results title for reduced complexity
   onInput(value) {
-    // Value was cleared, either by ESC, input's builtin clear button, or manually
     if (value === '') {
-      return this.resetResults()
+      return this.handleInputClear()
     }
-
-    // Set the query as a class property so other methods can have easy access to it
-    this.query = value
-
-    // Update the results title separately from updating renderResults so as to avoid the latter’s debounce
-    this.resultsTitleElement.textContent = `Results for ‘${value}’`
-
-    // If a call to our timeout fn is already queued, clear the timeout and start a fresh one
-    if (this.timeout) {
-      clearTimeout(this.timeout)
-    }
-
-    // Set a timeout to fire this.search at most once every 200ms;
-    // this prevents excessive calls to the the search endpoint if the user is a fast typer
-    this.timeout = setTimeout(() => {
-      this.search()
-    }, 200)
-
-    // Clear the timeout
+    this.setQueryAndTitle(value)
+    this.debounceSearch()
     return () => {
       clearTimeout(this.timeout)
     }
+  }
+
+  handleInputClear() {
+    return this.resetResults()
+  }
+
+  setQueryAndTitle(value) {
+    this.query = value
+    this.resultsTitleElement.textContent = `Results for ‘${value}’`
+  }
+
+  debounceSearch() {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+    }
+    this.timeout = setTimeout(() => {
+      this.search()
+    }, 200)
   }
 
   async search() {
