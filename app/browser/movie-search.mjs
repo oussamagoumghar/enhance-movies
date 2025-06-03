@@ -237,6 +237,30 @@ class MovieSearch extends HTMLElement {
     this.emptyStateContainer.innerHTML = ''
     this.resultsContainer.innerHTML = ''
   }
+  
+  updateAttribute(name, value) {
+    if (name === 'id') {
+      this.link.setAttribute('href', `/movie?id=${value}&page=1`)
+    }
+
+    if (name === 'poster_path' && value !== 'null') {
+      this.img.setAttribute('src', `https://image.tmdb.org/t/p/w342${value}`)
+    }
+
+    if (name === 'title') {
+      this.img.setAttribute('alt', value)
+      this.movieTitle.innerText = value
+    }
+
+    if (name === 'vote_average') {
+      const average = Number(value).toFixed(1)
+      const rating = value
+        ? (100 - ((Number(value) / 10) * 100))
+        : 'Not yet rated'
+      if(this.rating) this.rating.setAttribute('inset', rating)
+      this.average.innerHTML = average
+    }
+  }
 }
 
 customElements.define('movie-search', MovieSearch)
