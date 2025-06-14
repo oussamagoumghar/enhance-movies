@@ -239,4 +239,45 @@ class MovieSearch extends HTMLElement {
   }
 }
 
+function handleIdAttributeChange(link, value) {
+  link.setAttribute('href', `/movie?id=${value}&page=1`)
+}
+
+function handlePosterPathAttributeChange(img, value) {
+  if (value !== 'null') {
+    img.setAttribute('src', `https://image.tmdb.org/t/p/w342${value}`)
+  }
+}
+
+function handleTitleAttributeChange(img, movieTitle, value) {
+  img.setAttribute('alt', value)
+  movieTitle.innerText = value
+}
+
+function handleVoteAverageAttributeChange(ratingElement, averageElement, value) {
+  const average = Number(value).toFixed(1)
+  const rating = value
+    ? (100 - ((Number(value) / 10) * 100))
+    : 'Not yet rated'
+  if (ratingElement) ratingElement.setAttribute('inset', rating)
+  averageElement.innerHTML = average
+}
+
 customElements.define('movie-search', MovieSearch)
+
+MovieSearchPoster.prototype.attributeChangedCallback = function(name, old, value) {
+  if (old !== value) {
+    if (name === 'id') {
+      handleIdAttributeChange(this.link, value)
+    }
+    if (name === 'poster_path') {
+      handlePosterPathAttributeChange(this.img, value)
+    }
+    if (name === 'title') {
+      handleTitleAttributeChange(this.img, this.movieTitle, value)
+    }
+    if (name === 'vote_average') {
+      handleVoteAverageAttributeChange(this.rating, this.average, value)
+    }
+  }
+}
