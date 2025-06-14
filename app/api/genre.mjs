@@ -3,7 +3,7 @@ import { getGenreMovies, getVideos } from '../tmdbAPI/index.mjs'
 import { fetchGenres } from '../middleware/genres.mjs'
 import { getActiveRoute } from '../middleware/activeRoute.mjs'
 
-export let get = [getActiveRoute, fetchGenres, fetchMovies]
+export const get = [getActiveRoute, fetchGenres, fetchMovies]
 
 export async function fetchMovies (req) {
   const { name, id, page = 1, sort_by = 'popularity.desc' } = req.query
