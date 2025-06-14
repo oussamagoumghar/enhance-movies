@@ -19,9 +19,11 @@ links.forEach(link => {
 
     // If the hovered target isn't the link itself, get the href
     // from the target's closest link
-    e.target.tagName.toLowerCase() === 'a'
-      ? href = e.target.href
-      : href = e.target.closest('a').href
+    if (e.target.tagName.toLowerCase() === 'a') {
+      href = e.target.href
+    } else {
+      href = e.target.closest('a').href
+    }
 
     // Prefetch the href after hovering for 500ms
     timer = setTimeout(() => {
