@@ -2,7 +2,7 @@ import getCacheControl from '../lib/cacheControl.mjs'
 import { searchMovies } from '../tmdbAPI/index.mjs'
 import { fetchGenres } from '../middleware/genres.mjs'
 
-export let get = [fetchGenres, fetchMovies]
+export const get = [fetchGenres, fetchMovies]
 
 export async function fetchMovies (req) {
   const { q, page = 1 } = req.query
